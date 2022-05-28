@@ -1,3 +1,11 @@
+# PyCharm
 .idea
+
+# Python env and cache
 venv
 __pycache__
+
+# Non-Nim files
+*.asm
+*.c
+*.h

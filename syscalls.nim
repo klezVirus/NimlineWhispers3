@@ -11,7 +11,7 @@
 
 #include <windows.h>
 
-#define SW3_SEED 0x17D64E9D
+#define SW3_SEED 0x5DAC90EC
 #define SW3_ROL8(v) (v << 8 | v >> 24)
 #define SW3_ROR8(v) (v >> 8 | v << 24)
 #define SW3_ROX8(v) ((SW3_SEED % 2) ? SW3_ROL8(v) : SW3_ROR8(v))
@@ -338,7 +338,7 @@ proc NtResumeThread*(ThreadHandle: HANDLE, PreviousSuspendCount: PULONG): NTSTAT
 	mov [rsp+24], r8
 	mov [rsp+32], r9
 	sub rsp, 0x28
-	mov ecx, 0x08DA49124
+	mov ecx, 0x010B64D87
 	call SW3_GetSyscallNumber              
 	add rsp, 0x28
 	mov rcx, [rsp+8]                      
@@ -357,7 +357,7 @@ proc NtAllocateVirtualMemory*(ProcessHandle: HANDLE, BaseAddress: PVOID, ZeroBit
 	mov [rsp+24], r8
 	mov [rsp+32], r9
 	sub rsp, 0x28
-	mov ecx, 0x03595233B
+	mov ecx, 0x00B9D610F
 	call SW3_GetSyscallNumber              
 	add rsp, 0x28
 	mov rcx, [rsp+8]                      
@@ -376,7 +376,7 @@ proc NtClose*(Handle: HANDLE): NTSTATUS {.asmNoStackFrame.} =
 	mov [rsp+24], r8
 	mov [rsp+32], r9
 	sub rsp, 0x28
-	mov ecx, 0x0D5301352
+	mov ecx, 0x00ADBF09B
 	call SW3_GetSyscallNumber              
 	add rsp, 0x28
 	mov rcx, [rsp+8]                      
@@ -395,7 +395,7 @@ proc NtCreateThreadEx*(ThreadHandle: PHANDLE, DesiredAccess: ACCESS_MASK, Object
 	mov [rsp+24], r8
 	mov [rsp+32], r9
 	sub rsp, 0x28
-	mov ecx, 0x092BEEC58
+	mov ecx, 0x044A6049E
 	call SW3_GetSyscallNumber              
 	add rsp, 0x28
 	mov rcx, [rsp+8]                      
@@ -414,7 +414,7 @@ proc NtOpenProcess*(ProcessHandle: PHANDLE, DesiredAccess: ACCESS_MASK, ObjectAt
 	mov [rsp+24], r8
 	mov [rsp+32], r9
 	sub rsp, 0x28
-	mov ecx, 0x0C59B27F7
+	mov ecx, 0x0692D946C
 	call SW3_GetSyscallNumber              
 	add rsp, 0x28
 	mov rcx, [rsp+8]                      
@@ -433,7 +433,7 @@ proc NtWriteVirtualMemory*(ProcessHandle: HANDLE, BaseAddress: PVOID, Buffer: PV
 	mov [rsp+24], r8
 	mov [rsp+32], r9
 	sub rsp, 0x28
-	mov ecx, 0x03D9E290D
+	mov ecx, 0x047D47D57
 	call SW3_GetSyscallNumber              
 	add rsp, 0x28
 	mov rcx, [rsp+8]                      
