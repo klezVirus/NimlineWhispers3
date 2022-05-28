@@ -1,0 +1,3 @@
+[submodule "SysWhispers2"]
+	path = SysWhispers3
+	url = https://github.com/klezVirus/SysWhispers3
