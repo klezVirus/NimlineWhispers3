@@ -11,7 +11,7 @@
 
 #include <windows.h>
 
-#define SW3_SEED 0xD0BFD16C
+#define SW3_SEED 0x17D64E9D
 #define SW3_ROL8(v) (v << 8 | v >> 24)
 #define SW3_ROR8(v) (v >> 8 | v << 24)
 #define SW3_ROX8(v) ((SW3_SEED % 2) ? SW3_ROL8(v) : SW3_ROR8(v))
@@ -328,28 +328,17 @@ EXTERN_C PVOID SW3_GetRandomSyscallAddress(DWORD FunctionHash)
 
 """.}
 
-# NtResumeThread -> wLUSeDFdVxkNUxTj
-# NtAllocateVirtualMemory -> borIBHLuSygjsbGo
-# NtClose -> YQxWUtbrTUnTqCiC
-# NtCreateThreadEx -> NiofHjsQOAmJpRhi
-# NtOpenProcess -> aKEhTMrPpYbVoDEm
-# NtWriteVirtualMemory -> FcNcdSsYWtaPRowr
 
 
 
-
-
-proc wLUSeDFdVxkNUxTj*(ThreadHandle: HANDLE, PreviousSuspendCount: PULONG): NTSTATUS {.asmNoStackFrame.} =
+proc NtResumeThread*(ThreadHandle: HANDLE, PreviousSuspendCount: PULONG): NTSTATUS {.asmNoStackFrame.} =
     asm """
 	mov [rsp +8], rcx          
 	mov [rsp+16], rdx
 	mov [rsp+24], r8
 	mov [rsp+32], r9
 	sub rsp, 0x28
-	mov ecx, 0x076DC3A77
-	call SW3_GetSyscallAddress              
-	mov r15, rax                           
-	mov ecx, 0x076DC3A77
+	mov ecx, 0x08DA49124
 	call SW3_GetSyscallNumber              
 	add rsp, 0x28
 	mov rcx, [rsp+8]                      
@@ -357,20 +346,18 @@ proc wLUSeDFdVxkNUxTj*(ThreadHandle: HANDLE, PreviousSuspendCount: PULONG): NTST
 	mov r8, [rsp+24]
 	mov r9, [rsp+32]
 	mov r10, rcx
-	jmp r15                                
+	syscall                    
+	ret
     """
 
-proc borIBHLuSygjsbGo*(ProcessHandle: HANDLE, BaseAddress: PVOID, ZeroBits: ULONG, RegionSize: PSIZE_T, AllocationType: ULONG, Protect: ULONG): NTSTATUS {.asmNoStackFrame.} =
+proc NtAllocateVirtualMemory*(ProcessHandle: HANDLE, BaseAddress: PVOID, ZeroBits: ULONG, RegionSize: PSIZE_T, AllocationType: ULONG, Protect: ULONG): NTSTATUS {.asmNoStackFrame.} =
     asm """
 	mov [rsp +8], rcx          
 	mov [rsp+16], rdx
 	mov [rsp+24], r8
 	mov [rsp+32], r9
 	sub rsp, 0x28
-	mov ecx, 0x0C86DDCF0
-	call SW3_GetSyscallAddress              
-	mov r15, rax                           
-	mov ecx, 0x0C86DDCF0
+	mov ecx, 0x03595233B
 	call SW3_GetSyscallNumber              
 	add rsp, 0x28
 	mov rcx, [rsp+8]                      
@@ -378,20 +365,18 @@ proc borIBHLuSygjsbGo*(ProcessHandle: HANDLE, BaseAddress: PVOID, ZeroBits: ULON
 	mov r8, [rsp+24]
 	mov r9, [rsp+32]
 	mov r10, rcx
-	jmp r15                                
+	syscall                    
+	ret
     """
 
-proc YQxWUtbrTUnTqCiC*(Handle: HANDLE): NTSTATUS {.asmNoStackFrame.} =
+proc NtClose*(Handle: HANDLE): NTSTATUS {.asmNoStackFrame.} =
     asm """
 	mov [rsp +8], rcx          
 	mov [rsp+16], rdx
 	mov [rsp+24], r8
 	mov [rsp+32], r9
 	sub rsp, 0x28
-	mov ecx, 0x01090273B
-	call SW3_GetSyscallAddress              
-	mov r15, rax                           
-	mov ecx, 0x01090273B
+	mov ecx, 0x0D5301352
 	call SW3_GetSyscallNumber              
 	add rsp, 0x28
 	mov rcx, [rsp+8]                      
@@ -399,20 +384,18 @@ proc YQxWUtbrTUnTqCiC*(Handle: HANDLE): NTSTATUS {.asmNoStackFrame.} =
 	mov r8, [rsp+24]
 	mov r9, [rsp+32]
 	mov r10, rcx
-	jmp r15                                
+	syscall                    
+	ret
     """
 
-proc NiofHjsQOAmJpRhi*(ThreadHandle: PHANDLE, DesiredAccess: ACCESS_MASK, ObjectAttributes: POBJECT_ATTRIBUTES, ProcessHandle: HANDLE, StartRoutine: PVOID, Argument: PVOID, CreateFlags: ULONG, ZeroBits: SIZE_T, StackSize: SIZE_T, MaximumStackSize: SIZE_T, AttributeList: PPS_ATTRIBUTE_LIST): NTSTATUS {.asmNoStackFrame.} =
+proc NtCreateThreadEx*(ThreadHandle: PHANDLE, DesiredAccess: ACCESS_MASK, ObjectAttributes: POBJECT_ATTRIBUTES, ProcessHandle: HANDLE, StartRoutine: PVOID, Argument: PVOID, CreateFlags: ULONG, ZeroBits: SIZE_T, StackSize: SIZE_T, MaximumStackSize: SIZE_T, AttributeList: PPS_ATTRIBUTE_LIST): NTSTATUS {.asmNoStackFrame.} =
     asm """
 	mov [rsp +8], rcx          
 	mov [rsp+16], rdx
 	mov [rsp+24], r8
 	mov [rsp+32], r9
 	sub rsp, 0x28
-	mov ecx, 0x07EA24226
-	call SW3_GetSyscallAddress              
-	mov r15, rax                           
-	mov ecx, 0x07EA24226
+	mov ecx, 0x092BEEC58
 	call SW3_GetSyscallNumber              
 	add rsp, 0x28
 	mov rcx, [rsp+8]                      
@@ -420,20 +403,18 @@ proc NiofHjsQOAmJpRhi*(ThreadHandle: PHANDLE, DesiredAccess: ACCESS_MASK, Object
 	mov r8, [rsp+24]
 	mov r9, [rsp+32]
 	mov r10, rcx
-	jmp r15                                
+	syscall                    
+	ret
     """
 
-proc aKEhTMrPpYbVoDEm*(ProcessHandle: PHANDLE, DesiredAccess: ACCESS_MASK, ObjectAttributes: POBJECT_ATTRIBUTES, ClientId: PCLIENT_ID): NTSTATUS {.asmNoStackFrame.} =
+proc NtOpenProcess*(ProcessHandle: PHANDLE, DesiredAccess: ACCESS_MASK, ObjectAttributes: POBJECT_ATTRIBUTES, ClientId: PCLIENT_ID): NTSTATUS {.asmNoStackFrame.} =
     asm """
 	mov [rsp +8], rcx          
 	mov [rsp+16], rdx
 	mov [rsp+24], r8
 	mov [rsp+32], r9
 	sub rsp, 0x28
-	mov ecx, 0x0CC57CFD9
-	call SW3_GetSyscallAddress              
-	mov r15, rax                           
-	mov ecx, 0x0CC57CFD9
+	mov ecx, 0x0C59B27F7
 	call SW3_GetSyscallNumber              
 	add rsp, 0x28
 	mov rcx, [rsp+8]                      
@@ -441,20 +422,18 @@ proc aKEhTMrPpYbVoDEm*(ProcessHandle: PHANDLE, DesiredAccess: ACCESS_MASK, Objec
 	mov r8, [rsp+24]
 	mov r9, [rsp+32]
 	mov r10, rcx
-	jmp r15                                
+	syscall                    
+	ret
     """
 
-proc FcNcdSsYWtaPRowr*(ProcessHandle: HANDLE, BaseAddress: PVOID, Buffer: PVOID, NumberOfBytesToWrite: SIZE_T, NumberOfBytesWritten: PSIZE_T): NTSTATUS {.asmNoStackFrame.} =
+proc NtWriteVirtualMemory*(ProcessHandle: HANDLE, BaseAddress: PVOID, Buffer: PVOID, NumberOfBytesToWrite: SIZE_T, NumberOfBytesWritten: PSIZE_T): NTSTATUS {.asmNoStackFrame.} =
     asm """
 	mov [rsp +8], rcx          
 	mov [rsp+16], rdx
 	mov [rsp+24], r8
 	mov [rsp+32], r9
 	sub rsp, 0x28
-	mov ecx, 0x02595231B
-	call SW3_GetSyscallAddress              
-	mov r15, rax                           
-	mov ecx, 0x02595231B
+	mov ecx, 0x03D9E290D
 	call SW3_GetSyscallNumber              
 	add rsp, 0x28
 	mov rcx, [rsp+8]                      
@@ -462,7 +441,8 @@ proc FcNcdSsYWtaPRowr*(ProcessHandle: HANDLE, BaseAddress: PVOID, Buffer: PVOID,
 	mov r8, [rsp+24]
 	mov r9, [rsp+32]
 	mov r10, rcx
-	jmp r15                                
+	syscall                    
+	ret
     """
 
 

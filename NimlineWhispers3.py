@@ -15,11 +15,14 @@ class NimlineWhispers:
     def __init__(self, debug, randomise, nobanner, **kwargs):
 
         # initialise class instance of SysWhispers3 so we can generate stubs and fetch seed values later
-        kwargs["debug"] = kwargs.pop("sw_debug")
-        kwargs["recovery"] = SyscallRecoveryType.from_name_or_default(kwargs.pop("method"))
-        kwargs["arch"] = Arch.from_string(kwargs.pop("arch"))
-        kwargs["compiler"] = Compiler.from_string(kwargs.pop("compiler"))
-        kwargs["syscall_instruction"] = "syscall" if not kwargs.pop("int2eh") else "int 2eh"
+        kwargs["debug"] = kwargs.pop("sw_debug") if kwargs.get("sw_debug") else False
+        kwargs["recovery"] = SyscallRecoveryType.from_name_or_default(kwargs.pop("method")) if kwargs.get("method") else SyscallRecoveryType.EMBEDDED
+        kwargs["arch"] = Arch.from_string(kwargs.pop("arch")) if kwargs.get("arch") else Arch.x64
+        kwargs["compiler"] = Compiler.from_string(kwargs.pop("compiler")) if kwargs.get("compiler") else Compiler.MSVC
+        kwargs["syscall_instruction"] = "syscall" if not kwargs.get("int2eh") else "int 2eh"
+
+        if kwargs.get("int2eh"):
+            _ = kwargs.pop("int2eh")
 
         self.syswhispers = SysWhispers(**kwargs)
 
@@ -38,7 +41,7 @@ class NimlineWhispers:
         self.SW3baseh = os.path.join(".", "SysWhispers3", "data", "base.h")
         self.SW3basec = os.path.join(".", "SysWhispers3", "data", "base.c")
 
-        self.fileInName = f"{self.basename}-asm.{kwargs['arch']}.asm"
+        self.fileInName = f"{self.basename}-asm.{kwargs['arch'].value}.asm"
         self.fileOutName = "syscalls.nim"
 
         self.regexFunctionStart = re.compile(r'([a-z0-9]{1,70})(\s+PROC)', re.IGNORECASE)
