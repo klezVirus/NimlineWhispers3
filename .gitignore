@@ -9,3 +9,6 @@ __pycache__
 *.asm
 *.c
 *.h
+
+# Tests
+tests

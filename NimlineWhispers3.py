@@ -15,7 +15,7 @@ class NimlineWhispers:
     def __init__(self, debug, randomise, nobanner, **kwargs):
 
         # initialise class instance of SysWhispers3 so we can generate stubs and fetch seed values later
-        kwargs["debug"] = kwargs.pop("sw_debug")
+        kwargs["debug"] = kwargs.pop("sw_debug") if "sw_debug" in kwargs.keys() else False
         kwargs["recovery"] = SyscallRecoveryType.from_name_or_default(kwargs.pop("method")) if kwargs.get("method") else SyscallRecoveryType.EMBEDDED
         kwargs["arch"] = Arch.from_string(kwargs.pop("arch")) if kwargs.get("arch") else Arch.x64
         kwargs["compiler"] = Compiler.from_string(kwargs.pop("compiler")) if kwargs.get("compiler") else Compiler.MSVC
