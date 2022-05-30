@@ -3,7 +3,7 @@
 
 # Adapted from @Outflank and @_DaWouw 's InlineWhispers project. https://github.com/outflanknl/InlineWhispers
 # All credit to them for the syswhispers regexp code
-
+import json
 import re, random, string, os, platform
 import argparse
 from pprint import pprint
@@ -54,6 +54,9 @@ class NimlineWhispers:
         self.functionOutputs = {}
         self.functionArgs = {}
         self.function_map = {}
+
+        self.c_types_file = "data/c_types.json"
+        self.c_types = []
 
         # why someone wouldn't want to print this masterpiece idk
         if not nobanner:
@@ -118,6 +121,10 @@ class NimlineWhispers:
         h = h.replace('<SEED_VALUE>', f'0x{self.syswhispers.seed:08X}')
         h += "#endif\n"
         out += h
+
+        c = open(self.SW3methods, mode='r').read()
+        if c.find("#define JUMPER") > -1:
+            out += "#define JUMPER\n"
 
         c = open(self.SW3basec, mode='r').read()
 
@@ -202,6 +209,14 @@ class NimlineWhispers:
             print('[i] We don\'t know the return type for {}, fix this manually.'.format(functionName))
             return 'UNKNOWN'
 
+    def add_known_types(self):
+        text = ""
+        with open(self.c_types_file, "r") as fp:
+            known_types = json.load(fp)
+        for t in self.c_types:
+            text += known_types.get(t) + "\n\n" if t in known_types.keys() else ""
+        return text
+
     def get_function_arguments(self, functionName):
         if functionName in self.functionOutputs:
             argString = ""
@@ -217,8 +232,10 @@ class NimlineWhispers:
     def read_required_functions_from_file(self):
         try:
             with open(self.functionsInName, mode='r') as functionsIn:
-                self.functions = ['Nt' + f[2:] if f[:2] == 'Zw' else f for f in
-                                  [l.strip() for l in functionsIn.readlines()]]
+                self.functions = [
+                    'Nt' + f[2:] if f[:2] == 'Zw' else f for f in
+                    [l.strip() for l in functionsIn.readlines()]
+                ]
                 self.filterFunctions = len(self.functions) and "*" not in self.functions
                 print('[i] Function filter file "{}" contains {} functions.'.format(self.functionsInName,
                                                                                     len(self.functions)))
@@ -242,6 +259,8 @@ class NimlineWhispers:
                                 self.functionArgs[currentFunction] = []
                     elif inFunction:
                         arg = f.split()
+                        # Saving arg type
+                        self.c_types.append(arg[1])
                         if len(arg) > 0:
                             argType, argName = self.parse_function_arg(arg)
                             currentFunctionArgs.append([argName, argType])
@@ -267,6 +286,7 @@ class NimlineWhispers:
 
             out = '{.passC:"-masm=intel".}\n\n'
             out += self.addSysWhispersFunctionBlock() + "\n\n"
+            out += self.add_known_types()
 
             if self.randomise:
                 for function in self.functions:
