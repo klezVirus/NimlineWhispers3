@@ -135,7 +135,8 @@ python NimlineWhispers3.py sw -m jumper
 
 ### Limitations ###
 
- * Egg insertion is supported, but the `FindAndReplace` function is not provided
+ * Egg insertion is not yet fully supported (issue with bytes definition)
+ * 32-bits is not yet tested, and may cause issues
 
 ### Credits ###
 
