@@ -215,6 +215,8 @@ class NimlineWhispers:
             known_types = json.load(fp)
         for t in self.c_types:
             text += known_types.get(t) + "\n\n" if t in known_types.keys() else ""
+        if text != "":
+            text = "type\n" + text
         return text
 
     def get_function_arguments(self, functionName):
